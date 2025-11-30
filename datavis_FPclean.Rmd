@@ -1,0 +1,22 @@
+---
+title: "data vis FP clean"
+author: "Eric Fagan"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+Import data from kaggle: https://www.kaggle.com/datasets/jamiewelsh2/nba-player-salaries-2022-23-season?resource=download
+First step is to drop irrelevant columns. All shooting stats were originally broken into 2s, 3s, and FTs and rebounding into offensive and defensive; for both of these only total categories were kept. Stats related to steals blocks and turnovers were dropped as these tend to be noisy. For duplicative stats (ie effective field goal percentage and true shooting percentage) only one was retained.
+Anyone who played fewer than 8 games was dropped. A quick scan of all columns revealed this cut off eliminated all outliers (using a cutoff of 5 left rebounding outliers).
+```{r}
+nba_sal <- read.csv("C:\\Users\\ericf\\Documents\\Stats Masters\\Fall 2025\\Data Visualization\\homework\\final project\\nba__salary23.csv")
+colnames(nba_sal)
+nba_sal <- nba_sal[,c(2:7,9,11,12,25,26,31:34,36,39,40,44,47,49:52)]
+nba_sal <- nba_sal |> filter(GP>7)
+#write.csv(nba_sal, "C:\\Users\\ericf\\Documents\\Stats Masters\\Fall 2025\\Data Visualization\\homework\\final project\\nba_salary_clean.csv")
+```
+
